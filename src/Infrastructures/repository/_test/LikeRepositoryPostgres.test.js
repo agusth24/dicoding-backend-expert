@@ -41,7 +41,7 @@ describe('LikeRepositoryPostgres', () => {
 			const threadId = 'thread-123';
 			const commentId = 'comment-123';
 			const likeId = 'like-123';
-			await UsersTableTestHelper.addUser({id: userId});
+
 			await ThreadsTableTestHelper.addThread({id: threadId});
 			await ThreadsTableTestHelper.addComment({commentId, threadId, owner: userId});
 			await ThreadsTableTestHelper.addLike({likeId, commentId, owner: userId});
