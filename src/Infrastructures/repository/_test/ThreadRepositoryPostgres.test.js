@@ -21,15 +21,20 @@ describe('ThreadRepositoryPostgres', () => {
 	describe('addThread function', () => {
 		it('should persist add thread and return added thread correctly', async () => {
 			// Arrange
+			const user = {
+				id: 'user-123',
+				username: 'agusth',
+			};
 			const addThread = new AddThread({
 				title: 'sebuah thread',
 				body: 'sebuah body thread',
 			});
-			const owner = 'agusth';
+			const owner = user.id;
 			const fakeIdGenerator = () => '123'; // stub!
 			const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
 			// Action
+			await UsersTableTestHelper.addUser(user);
 			await threadRepositoryPostgres.addThread(addThread, owner);
 
 			// Assert
@@ -39,15 +44,20 @@ describe('ThreadRepositoryPostgres', () => {
 
 		it('should return registered thread correctly', async () => {
 			// Arrange
+			const user = {
+				id: 'user-123',
+				username: 'agusth',
+			};
 			const addThread = new AddThread({
 				title: 'sebuah thread',
 				body: 'sebuah body thread',
 			});
-			const owner = 'agusth';
+			const owner = user.id;
 			const fakeIdGenerator = () => '123'; // stub!
 			const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
 			// Action
+			await UsersTableTestHelper.addUser(user);
 			const addedThread = await threadRepositoryPostgres.addThread(addThread, owner);
 
 			// Assert
@@ -70,14 +80,22 @@ describe('ThreadRepositoryPostgres', () => {
 		it('should return verify thread correctly', async () => {
 			// Arrange
 			const threadId = 'thread-123';
-			await ThreadsTableTestHelper.addThread({
-				id: threadId,
+			const user = {
+				id: 'user-123',
+				username: 'agusth',
+			};
+			const thread = {
+				id: 'thread-123',
 				title: 'sebuah thread',
-				body: 'sebuah body thread',
-			});
+				body: 'sebuah thread',
+				date: new Date(),
+				owner: 'user-123',
+			};
 			const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
 			// Action & Assert
+			await UsersTableTestHelper.addUser(user);
+			await ThreadsTableTestHelper.addThread(thread);
 			await expect(threadRepositoryPostgres.verifyThread(threadId)).resolves.not.toThrowError(NotFoundError);
 		});
 	});
