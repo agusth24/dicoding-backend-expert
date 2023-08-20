@@ -39,5 +39,5 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
-	pgm.dropTable('replies');
+	pgm.dropTable('likes');
 };
